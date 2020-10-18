@@ -18,12 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Checkout.com.AcquiringBank\Checkout.com.AcquiringBank.csproj" />
+    <ProjectReference Include="..\Checkout.com.AcquiringBank.Client\Checkout.com.AcquiringBank.Client.csproj" />
     <ProjectReference Include="..\Checkout.com.Common\Checkout.com.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Business\Services\DTO\" />
+    <ProjectReference Include="..\Checkout.com.PaymentGateway.DTO\Checkout.com.PaymentGateway.DTO.csproj" />
   </ItemGroup>
 
 </Project>

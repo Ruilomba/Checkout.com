@@ -1,11 +1,13 @@
 ﻿namespace Checkout.com.PaymentGateway.Business.Services.Implementations
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Checkout.com.Common.Configuration;
     using Checkout.com.Common.Utils;
     using Checkout.com.PaymentGateway.Business.Adapters;
     using Checkout.com.PaymentGateway.Business.Converters;
+    using Checkout.com.PaymentGateway.Business.DAL.Repositories;
     using Checkout.com.PaymentGateway.DTO.Card;
     using Checkout.com.PaymentGateway.DTO.Payments;
 
@@ -14,25 +16,50 @@
         private readonly IPaymentProcessor paymentProcessor;
         private readonly IMerchantService merchantService;
         private readonly ApplicationSettings applicationSettings;
+        private readonly IPaymentRepository paymentRepository;
 
         public PaymentService(
             IPaymentProcessor paymentProcessor, 
             IMerchantService merchantService,
-            ApplicationSettings applicationSettings)
+            ApplicationSettings applicationSettings,
+            IPaymentRepository paymentRepository)
         {
             this.paymentProcessor = paymentProcessor;
             this.merchantService = merchantService;
             this.applicationSettings = applicationSettings;
+            this.paymentRepository = paymentRepository;
         }
 
-        public Task<PaymentResponse> ProcessPayment(PaymentRequest paymentRequest)
+        public async Task<Payment> GetPaymentById(Guid id)
+        {
+            var result = await this.paymentRepository.GetById(id);
+            result.CardNumber.DecryptString(this.applicationSettings.Secret);
+            return result;
+        }
+
+        public async Task<List<Payment>> SearchPayments(string cardNumber, string merchantId, string customerId)
+        {
+            var result = await this.paymentRepository.Search(cardNumber, merchantId, customerId);
+            result.ForEach(payment => payment.CardNumber.DecryptString(this.applicationSettings.Secret));
+            return result;
+        }
+
+        public async Task<PaymentResponse> ProcessPayment(PaymentRequest paymentRequest)
         {
             this.ValidateRequest(paymentRequest);
             this.EncryptCard(paymentRequest.Merchant.Card);
             this.EncryptCard(paymentRequest.Shopper.Card);
 
             var commissionContractValue = this.merchantService.GetCommisionFromMerchant(paymentRequest.Merchant.Id);
-            return this.paymentProcessor.ProcessPayment(paymentRequest.ToAdapterDTO(commissionContractValue));
+            var processmentResult =  await this.paymentProcessor.ProcessPayment(paymentRequest.ToAdapterDTO(commissionContractValue));
+            var paymentSaveResult = await this.paymentRepository.SavePayment(paymentRequest.ToDTO(processmentResult.PaymentStatus));
+
+            return new PaymentResponse
+            {
+                PaymentStatus = processmentResult.PaymentStatus,
+                PaymentId = paymentSaveResult.Id
+            };
+
         }
 
         private void EncryptCard(Card card)

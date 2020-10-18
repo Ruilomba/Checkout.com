@@ -7,6 +7,22 @@
 
     public static class DTOModelConverter
     {
+        public static DTO.Payments.Payment ToDTO(
+            this DTO.Payments.PaymentRequest paymentRequest,
+            DTO.Payments.PaymentStatus paymentStatus)
+        {
+            return new DTO.Payments.Payment
+            {
+                CardNumber = paymentRequest.Shopper.Card.CardNumber,
+                CurrencyCode = paymentRequest.Shopper.User.CurrencyCode,
+                CustomerId = paymentRequest.Shopper.User.UserName,
+                MerchantId = paymentRequest.Merchant.Id,
+                PaymentDate = DateTime.UtcNow,
+                Status = paymentStatus,
+                Value = paymentRequest.PurchaseValue.Value,
+            };
+        }
+
         public static DTO.Payments.Payment ToDTO(this Model.Payment payment)
         {
             return new DTO.Payments.Payment

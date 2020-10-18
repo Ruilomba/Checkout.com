@@ -2,10 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>_3rdPartyBank</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Checkout.com.AcquiringBank.DTO\Checkout.com.AcquiringBank.DTO.csproj" />
-  </ItemGroup>
 
 </Project>

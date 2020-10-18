@@ -14,7 +14,7 @@
         private readonly Dictionary<CardType, IPaymentProcessorAdapter> paymentProcessorAdapterResolver;
 
         public PaymentProcessor(
-            AcquiringBank.Business.Services.IPaymentProcessor paymentProcessor,
+            AcquiringBank.Client.IAcquiringBankClient paymentProcessor,
             ApplicationSettings applicationSettings)
         {
             this.paymentProcessorAdapterResolver = new Dictionary<CardType, IPaymentProcessorAdapter>()

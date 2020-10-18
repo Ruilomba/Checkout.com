@@ -1,5 +1,0 @@
-C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Chechout.com.Common\bin\Debug\netstandard2.0\Chechout.com.Common.deps.json
-C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Chechout.com.Common\bin\Debug\netstandard2.0\Chechout.com.Common.dll
-C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Chechout.com.Common\obj\Debug\netstandard2.0\Chechout.com.Common.csprojAssemblyReference.cache
-C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Chechout.com.Common\obj\Debug\netstandard2.0\Chechout.com.Common.AssemblyInfoInputs.cache
-C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Chechout.com.Common\obj\Debug\netstandard2.0\Chechout.com.Common.AssemblyInfo.cs

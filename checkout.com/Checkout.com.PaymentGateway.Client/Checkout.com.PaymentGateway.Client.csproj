@@ -5,15 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Business\DTO\**" />
-    <EmbeddedResource Remove="Business\DTO\**" />
-    <None Remove="Business\DTO\**" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\3rdPartyBank\3rdPartyBank.csproj" />
     <ProjectReference Include="..\Checkout.com.AcquiringBank.DTO\Checkout.com.AcquiringBank.DTO.csproj" />
-    <ProjectReference Include="..\Checkout.com.Common\Checkout.com.Common.csproj" />
   </ItemGroup>
 
 </Project>

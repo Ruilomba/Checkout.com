@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Checkout.com.PaymentGateway.Business.Services;
+using Checkout.com.PaymentGateway.DTO.Payments;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Api.Controllers
@@ -11,18 +10,54 @@ namespace Presentation.Api.Controllers
     [ApiController]
     public class PaymentsController : ControllerBase
     {
+        private readonly IPaymentService paymentService;
 
-
-        [HttpGet("{paymentId}")]
-        public async Task<IActionResult> Get(string paymentId)
+        public PaymentsController(IPaymentService paymentService)
         {
-            return this.Ok("success");
+            this.paymentService = paymentService;
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search(string cardNumber, string merchantId, string customerId)
+        {
+            try
+            {
+                return this.Ok(await this.paymentService.SearchPayments(cardNumber, merchantId, customerId));
+            }
+            catch (Exception e)
+            {
+                //TODO LogException(e);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                return this.Ok(await this.paymentService.GetPaymentById(id));
+            }
+            catch (Exception e)
+            {
+                //TODO LogException(e);
+                return StatusCode(500);
+            }
         }
 
         [HttpPost()]
-        public async Task<IActionResult> Create(string paymentId)
+        public async Task<IActionResult> Create(PaymentRequest paymentRequest)
         {
-            return this.Ok("success");
+            try
+            {
+                var result = await this.paymentService.ProcessPayment(paymentRequest);
+                return this.Created($"api/payments/{result.PaymentId}", result);
+            }
+            catch (Exception e)
+            {
+                //TODO LogException(e);
+                return StatusCode(500);
+            }
         }
     }
 }

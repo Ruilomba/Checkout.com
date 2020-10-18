@@ -9,11 +9,11 @@
 
     public class MasterCardProcessorAdapter : IPaymentProcessorAdapter
     {
-        private readonly AcquiringBank.Business.Services.IPaymentProcessor paymentProcessor;
+        private readonly AcquiringBank.Client.IAcquiringBankClient paymentProcessor;
         private readonly ApplicationSettings applicationSettings;
 
         public MasterCardProcessorAdapter(
-            AcquiringBank.Business.Services.IPaymentProcessor paymentProcessor,
+            AcquiringBank.Client.IAcquiringBankClient paymentProcessor,
             ApplicationSettings applicationSettings)
         {
             this.paymentProcessor = paymentProcessor;
