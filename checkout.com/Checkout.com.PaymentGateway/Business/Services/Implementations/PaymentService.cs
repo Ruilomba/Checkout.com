@@ -87,6 +87,21 @@
             {
                 throw new ArgumentException("Shopper userName cannot be null");
             }
+
+            if(paymentRequest.PurchaseValue == null)
+            {
+                throw new ArgumentException("Purchase value cannot be null");
+            }
+
+            if (paymentRequest.PurchaseValue.CurrencyCode == null)
+            {
+                throw new ArgumentException("Purchase currency cannot be null");
+            }
+
+            if (paymentRequest.PurchaseValue.Value <= 0m)
+            {
+                throw new ArgumentException("Purchase value cannot be 0 or less");
+            }
         }
 
         private void ValidateCard(Card card)

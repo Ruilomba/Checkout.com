@@ -1,5 +1,6 @@
 ﻿namespace Checkout.com.PaymentGateway.Business.Converters
 {
+    using Checkout.com.Common;
     using Checkout.com.PaymentGateway.Business.Adapters.DTO;
     using Checkout.com.PaymentGateway.DTO.Payments;
 
@@ -17,7 +18,7 @@
             return new PaymentProcessorPaymentRequest
             {
                 Merchant = paymentRequest.Merchant,
-                PurchaseValue = paymentRequest.PurchaseValue,
+                PurchaseValue = new Money(paymentRequest.PurchaseValue.Value, paymentRequest.PurchaseValue.CurrencyCode),
                 Shopper = paymentRequest.Shopper,
                 GatewayCommission = merchantCommision
             };

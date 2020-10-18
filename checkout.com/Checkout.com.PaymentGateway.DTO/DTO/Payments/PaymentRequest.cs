@@ -1,6 +1,5 @@
 ﻿namespace Checkout.com.PaymentGateway.DTO.Payments
 {
-    using Checkout.com.Common;
     using Checkout.com.PaymentGateway.DTO.Card;
 
     public class PaymentRequest

@@ -1,6 +1,6 @@
-﻿namespace Checkout.com.PaymentGateway.DTO.Payments
+﻿namespace Checkout.com.PaymentGateway.DTO
 {
-    public class PaymentDetails
+    public class Money
     {
         public decimal Value { get; set; }
 
