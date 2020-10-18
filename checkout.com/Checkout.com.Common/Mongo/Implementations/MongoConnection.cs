@@ -17,24 +17,14 @@
         public MongoDbConnection(string connectionString)
         {
             this.connectionString = connectionString;
-        }
-
-        internal static IMongoDbConnection BuildFrom(string connectionString)
-        {
-            return new MongoDbConnection(connectionString ?? throw new ArgumentNullException(nameof(connectionString)));
+            this.Connect();
         }
 
         public void Connect()
         {
-            void SocketConfigurator(Socket s) => s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+            this.mongoClient = new MongoClient(connectionString);
+            var dbList = mongoClient.ListDatabases().ToList();
 
-            this.mongoUrl = new MongoUrl(this.connectionString);
-
-            var settings = MongoClientSettings.FromUrl(this.mongoUrl);
-            settings.MaxConnectionIdleTime = TimeSpan.FromSeconds(30);
-            settings.ClusterConfigurator = builder => builder.ConfigureTcp(tcp => tcp.With(socketConfigurator: (Action<Socket>)SocketConfigurator));
-
-            this.mongoClient = new MongoClient(settings);
         }
 
         public IMongoCollection<T> GetCollection<T>(string collectionName)

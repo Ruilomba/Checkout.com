@@ -2,16 +2,6 @@
 
 services:
 
-  mongo:
-    container_name: mongo
-    image: mongo
-    restart: always
-    volumes:
-      - ${WEBAPP_STORAGE_HOME}/site:/data/db
-      #- ./data:/data/db
-    ports:
-      - "27017:27017"
-
   web:
     build: .
     ports:
@@ -22,5 +12,3 @@ services:
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
-    links:
-      - mongo

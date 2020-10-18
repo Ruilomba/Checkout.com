@@ -16,7 +16,7 @@
         private readonly IMongoDbConnection mongoDbConnection;
         private readonly IMongoCollection<Model.Payment> paymentsCollection;
 
-        internal PaymentRepository(IMongoDbConnection mongoDbConnection)
+        public PaymentRepository(IMongoDbConnection mongoDbConnection)
         {
             this.mongoDbConnection = mongoDbConnection ?? throw new ArgumentNullException(nameof(mongoDbConnection));
             this.paymentsCollection = this.mongoDbConnection.GetCollection<Model.Payment>(CollectionNames.Payments);

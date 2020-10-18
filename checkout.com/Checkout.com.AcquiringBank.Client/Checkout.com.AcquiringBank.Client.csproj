@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Checkout.com.AcquiringBank.DTO\Checkout.com.AcquiringBank.DTO.csproj" />
+    <ProjectReference Include="..\Checkout.com.AcquiringBank\Checkout.com.AcquiringBank.csproj" />
   </ItemGroup>
 
 </Project>
