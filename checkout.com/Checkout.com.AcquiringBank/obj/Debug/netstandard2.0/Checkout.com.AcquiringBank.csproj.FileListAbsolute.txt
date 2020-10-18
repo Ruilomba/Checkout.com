@@ -1,0 +1,12 @@
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\bin\Debug\netstandard2.0\Checkout.com.AcquiringBank.deps.json
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\bin\Debug\netstandard2.0\Checkout.com.AcquiringBank.dll
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\bin\Debug\netstandard2.0\Checkout.com.AcquiringBank.pdb
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\obj\Debug\netstandard2.0\Checkout.com.AcquiringBank.AssemblyInfoInputs.cache
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\obj\Debug\netstandard2.0\Checkout.com.AcquiringBank.AssemblyInfo.cs
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\obj\Debug\netstandard2.0\Checkout.com.AcquiringBank.csproj.CoreCompileInputs.cache
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\obj\Debug\netstandard2.0\Checkout.com.AcquiringBank.dll
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\obj\Debug\netstandard2.0\Checkout.com.AcquiringBank.pdb
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\obj\Debug\netstandard2.0\Checkout.com.AcquiringBank.csprojAssemblyReference.cache
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\bin\Debug\netstandard2.0\Checkout.com.Common.dll
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\bin\Debug\netstandard2.0\Checkout.com.Common.pdb
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.AcquiringBank\obj\Debug\netstandard2.0\Checkout.com.AcquiringBank.csproj.CopyComplete

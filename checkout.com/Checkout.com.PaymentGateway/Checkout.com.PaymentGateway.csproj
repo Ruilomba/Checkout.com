@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Business\DAL\Repositories\Merchant\**" />
+    <Compile Remove="Business\DAL\Repositories\Shopper\**" />
+    <EmbeddedResource Remove="Business\DAL\Repositories\Merchant\**" />
+    <EmbeddedResource Remove="Business\DAL\Repositories\Shopper\**" />
+    <None Remove="Business\DAL\Repositories\Merchant\**" />
+    <None Remove="Business\DAL\Repositories\Shopper\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Checkout.com.AcquiringBank\Checkout.com.AcquiringBank.csproj" />
+    <ProjectReference Include="..\Checkout.com.Common\Checkout.com.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Business\Services\DTO\" />
+  </ItemGroup>
+
+</Project>

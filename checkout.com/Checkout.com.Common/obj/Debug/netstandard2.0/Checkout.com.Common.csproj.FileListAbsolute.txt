@@ -1,0 +1,8 @@
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.Common\obj\Debug\netstandard2.0\Checkout.com.Common.AssemblyInfoInputs.cache
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.Common\obj\Debug\netstandard2.0\Checkout.com.Common.AssemblyInfo.cs
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.Common\obj\Debug\netstandard2.0\Checkout.com.Common.csproj.CoreCompileInputs.cache
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.Common\bin\Debug\netstandard2.0\Checkout.com.Common.deps.json
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.Common\bin\Debug\netstandard2.0\Checkout.com.Common.dll
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.Common\bin\Debug\netstandard2.0\Checkout.com.Common.pdb
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.Common\obj\Debug\netstandard2.0\Checkout.com.Common.dll
+C:\Users\rui.lomba\Desktop\checkout.com\Checkout.com\checkout.com\Checkout.com.Common\obj\Debug\netstandard2.0\Checkout.com.Common.pdb
