@@ -2,7 +2,6 @@
 {
     using System;
     using System.Diagnostics;
-    using System.Reflection;
     using log4net;
     using Newtonsoft.Json;
 
@@ -32,6 +31,7 @@
         private ILog GetLogger()
         {
             StackTrace stackTrace = new StackTrace();
+            var type = stackTrace.GetFrame(2).GetMethod().DeclaringType;
             return LogManager.GetLogger(stackTrace.GetFrame(1).GetMethod().DeclaringType);
         }
 

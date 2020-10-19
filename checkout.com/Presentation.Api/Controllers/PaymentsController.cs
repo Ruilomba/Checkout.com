@@ -71,6 +71,7 @@ namespace Presentation.Api.Controllers
         {
             try
             {
+                this.logger.LogInfo("asdsad");
                 var result = await this.paymentService.ProcessPayment(paymentRequest);
                 return this.Created($"api/payments/{result.PaymentId}", result);
             }
