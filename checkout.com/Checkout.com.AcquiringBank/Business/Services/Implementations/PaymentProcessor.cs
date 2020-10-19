@@ -58,7 +58,7 @@
         private void DecryptCard(Card card)
         {
             card.CardNumber = card.CardNumber.DecryptString(applicationSettings.Secret);
-            card.CCV = card.CardNumber.DecryptString(applicationSettings.Secret);
+            card.CCV = card.CCV.DecryptString(applicationSettings.Secret);
         }
 
         private void DecryptAndValidateCard(Card card)

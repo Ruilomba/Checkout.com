@@ -33,7 +33,8 @@
                 MerchantId = payment.MerchantId,
                 PaymentDate = payment.PaymentDate,
                 Status = payment.Status.ToDTO(),
-                Value = payment.Value
+                Value = payment.Value,
+                Id = payment.Id
             };
         }
 

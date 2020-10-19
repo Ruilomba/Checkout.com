@@ -39,14 +39,18 @@
                 return null;
             }
 
-            result.CardNumber.DecryptString(this.applicationSettings.Secret);
+            result.CardNumber = result.CardNumber.DecryptString(this.applicationSettings.Secret);
             return result;
         }
 
         public async Task<List<Payment>> SearchPayments(string cardNumber, string merchantId, string customerId)
         {
+            if(cardNumber != null)
+            {
+                cardNumber = cardNumber.EncryptString(this.applicationSettings.Secret);
+            }
             var result = await this.paymentRepository.Search(cardNumber, merchantId, customerId);
-            result?.ForEach(payment => payment.CardNumber.DecryptString(this.applicationSettings.Secret));
+            result?.ForEach(payment => payment.CardNumber = payment.CardNumber.DecryptString(this.applicationSettings.Secret));
             return result;
         }
 
@@ -71,7 +75,7 @@
         private void EncryptCard(Card card)
         {
             card.CardNumber = card.CardNumber.EncryptString(applicationSettings.Secret);
-            card.CCV = card.CardNumber.EncryptString(applicationSettings.Secret);
+            card.CCV = card.CCV.EncryptString(applicationSettings.Secret);
         }
 
         private void ValidateRequest(PaymentRequest paymentRequest)
