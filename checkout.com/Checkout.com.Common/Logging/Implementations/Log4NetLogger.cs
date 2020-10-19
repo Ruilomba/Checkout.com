@@ -29,8 +29,7 @@
         private ILog GetLogger()
         {
             StackTrace stackTrace = new StackTrace();
-            var type = stackTrace.GetFrame(2).GetMethod().DeclaringType;
-            return LogManager.GetLogger(stackTrace.GetFrame(1).GetMethod().DeclaringType);
+            return LogManager.GetLogger(stackTrace.GetFrame(2).GetMethod().DeclaringType);
         }
 
         private object GetLogObject(string message, Func<object> objectFunc, Exception exception)
