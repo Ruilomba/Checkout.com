@@ -21,14 +21,13 @@
         }
         public async Task<PaymentResponse> ProcessPayment(PaymentRequest paymentRequest)
         {
-            this.ValidateRequest(paymentRequest);
-            this.DecriptData(paymentRequest);
+            this.DecryptCardsAndValidateRequest(paymentRequest);
 
             var result = await this.bankClient.Process(paymentRequest.ToExternal());
             return result?.ToInternal();
         }
 
-        private void ValidateRequest(PaymentRequest paymentRequest)
+        private void DecryptCardsAndValidateRequest(PaymentRequest paymentRequest)
         {
             if (paymentRequest.CommissionPayment == null)
             {
@@ -50,18 +49,10 @@
                 throw new NotSupportedException("Commission payment value cannot be 0 or negative");
             }
 
-            this.ValidateCard(paymentRequest.MerchantPayment.CardToDeposit);
-            this.ValidateCard(paymentRequest.MerchantPayment.CardToWithraw);
-            this.ValidateCard(paymentRequest.CommissionPayment.CardToDeposit);
-            this.ValidateCard(paymentRequest.CommissionPayment.CardToWithraw);
-        }
-
-        private void DecriptData(PaymentRequest paymentRequest)
-        {
-            this.DecryptCard(paymentRequest.CommissionPayment.CardToDeposit);
-            this.DecryptCard(paymentRequest.CommissionPayment.CardToWithraw);
-            this.DecryptCard(paymentRequest.MerchantPayment.CardToWithraw);
-            this.DecryptCard(paymentRequest.MerchantPayment.CardToDeposit);
+            this.DecryptAndValidateCard(paymentRequest.MerchantPayment.CardToDeposit);
+            this.DecryptAndValidateCard(paymentRequest.MerchantPayment.CardToWithraw);
+            this.DecryptAndValidateCard(paymentRequest.CommissionPayment.CardToDeposit);
+            this.DecryptAndValidateCard(paymentRequest.CommissionPayment.CardToWithraw);
         }
 
         private void DecryptCard(Card card)
@@ -70,7 +61,7 @@
             card.CCV = card.CardNumber.DecryptString(applicationSettings.Secret);
         }
 
-        private void ValidateCard(Card card)
+        private void DecryptAndValidateCard(Card card)
         {
             if (card == null)
             {
@@ -81,6 +72,8 @@
             {
                 throw new ArgumentException("Merchant Card number cannot be null");
             }
+
+            this.DecryptCard(card);
 
             if (!int.TryParse(card.CardNumber.Trim(), out _))
             {
@@ -104,9 +97,9 @@
 
             var dateTimeNow = DateTime.UtcNow;
 
-            if (card.ExpirationDate.Year > dateTimeNow.Year
+            if (card.ExpirationDate.Year < dateTimeNow.Year
                 || (card.ExpirationDate.Year == dateTimeNow.Year
-                && card.ExpirationDate.Month > dateTimeNow.Month))
+                && card.ExpirationDate.Month < dateTimeNow.Month))
             {
                 throw new ArgumentException("Merchant Card is expired");
             }

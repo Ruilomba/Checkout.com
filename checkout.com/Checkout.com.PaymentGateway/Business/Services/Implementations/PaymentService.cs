@@ -144,9 +144,9 @@
 
             var dateTimeNow = DateTime.UtcNow;
 
-            if (card.ExpirationDate.Year > dateTimeNow.Year
+            if (card.ExpirationDate.Year < dateTimeNow.Year
                 || (card.ExpirationDate.Year == dateTimeNow.Year
-                && card.ExpirationDate.Month > dateTimeNow.Month))
+                && card.ExpirationDate.Month < dateTimeNow.Month))
             {
                 throw new ArgumentException("Merchant Card is expired");
             }
