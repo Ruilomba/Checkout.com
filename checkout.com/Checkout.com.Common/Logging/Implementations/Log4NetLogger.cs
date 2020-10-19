@@ -7,8 +7,6 @@
 
     public class Log4NetLogger : Logging.ILog
     {
-        private readonly ILog log;
-
         public Log4NetLogger()
         {
         }
