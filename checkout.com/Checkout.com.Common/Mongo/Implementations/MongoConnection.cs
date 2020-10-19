@@ -1,30 +1,22 @@
 ﻿namespace Checkout.com.Common.Mongo.Implementations
 {
-    using System;
-    using System.Net.Sockets;
-    using System.Text;
-    using System.Threading.Tasks;
     using MongoDB.Driver;
 
     public sealed class MongoDbConnection : IMongoDbConnection
     {
-        private readonly string connectionString;
-
         private MongoClient mongoClient;
 
         private MongoUrl mongoUrl;
 
         public MongoDbConnection(string connectionString)
         {
-            this.connectionString = connectionString;
+            this.mongoUrl = new MongoUrl(connectionString);
             this.Connect();
         }
 
         public void Connect()
         {
-            this.mongoClient = new MongoClient(connectionString);
-            var dbList = mongoClient.ListDatabases().ToList();
-
+            this.mongoClient = new MongoClient(this.mongoUrl);
         }
 
         public IMongoCollection<T> GetCollection<T>(string collectionName)

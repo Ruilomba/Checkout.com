@@ -7,7 +7,18 @@
     {
         public Task<PaymentResponse> Process(PaymentRequest paymentRequest)
         {
-            throw new System.NotImplementedException();
+            if (paymentRequest.MerchantPayment.CardToWithraw.CardNumber.StartsWith("1"))
+            {
+                return Task.Run(() => new PaymentResponse
+                {
+                    PaymentStatus = PaymentStatus.Accepted,
+                });
+            }
+
+            return Task.Run(() => new PaymentResponse
+            {
+                PaymentStatus = PaymentStatus.Declined,
+            });
         }
     }
 }
