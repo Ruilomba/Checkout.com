@@ -16,23 +16,23 @@
 
         public void LogInfo(string message, Func<object> objectFunc = null, Exception exception = null)
         {
-            StackTrace stackTrace = new StackTrace();
-
-            LogManager.GetLogger(stackTrace.GetFrame(1).GetMethod().DeclaringType).Info(this.GetLogObject(message, objectFunc, exception), exception);
+            GetLogger().Info(this.GetLogObject(message, objectFunc, exception), exception);
         }
 
         public void LogError(string message, Func<object> objectFunc = null, Exception exception = null)
         {
-            StackTrace stackTrace = new StackTrace();
-
-            LogManager.GetLogger(stackTrace.GetFrame(1).GetMethod().DeclaringType).Error(this.GetLogObject(message, objectFunc, exception), exception);
+            GetLogger().Error(this.GetLogObject(message, objectFunc, exception), exception);
         }
 
         public void LogWarning(string message, Func<object> objectFunc = null, Exception exception = null)
         {
-            StackTrace stackTrace = new StackTrace();
+            GetLogger().Warn(this.GetLogObject(message, objectFunc, exception), exception);
+        }
 
-            LogManager.GetLogger(stackTrace.GetFrame(1).GetMethod().DeclaringType).Warn(this.GetLogObject(message, objectFunc, exception), exception);
+        private ILog GetLogger()
+        {
+            StackTrace stackTrace = new StackTrace();
+            return LogManager.GetLogger(stackTrace.GetFrame(1).GetMethod().DeclaringType);
         }
 
         private object GetLogObject(string message, Func<object> objectFunc, Exception exception)
