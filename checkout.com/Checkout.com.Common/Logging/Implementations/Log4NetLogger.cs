@@ -1,6 +1,7 @@
 ﻿namespace Checkout.com.Common.Logging.Implementations
 {
     using System;
+    using System.Diagnostics;
     using System.Reflection;
     using log4net;
     using Newtonsoft.Json;
@@ -11,22 +12,27 @@
 
         public Log4NetLogger()
         {
-            log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         }
 
         public void LogInfo(string message, Func<object> objectFunc = null, Exception exception = null)
         {
-            log.Info(this.GetLogObject(message, objectFunc, exception), exception);
+            StackTrace stackTrace = new StackTrace();
+
+            LogManager.GetLogger(stackTrace.GetFrame(1).GetMethod().DeclaringType).Info(this.GetLogObject(message, objectFunc, exception), exception);
         }
 
-        public void LogError(string message, Func<object> objectFunc, Exception exception = null)
+        public void LogError(string message, Func<object> objectFunc = null, Exception exception = null)
         {
-            log.Error(this.GetLogObject(message, objectFunc, exception), exception);
+            StackTrace stackTrace = new StackTrace();
+
+            LogManager.GetLogger(stackTrace.GetFrame(1).GetMethod().DeclaringType).Error(this.GetLogObject(message, objectFunc, exception), exception);
         }
 
-        public void LogWarning(string message, Func<object> objectFunc, Exception exception = null)
+        public void LogWarning(string message, Func<object> objectFunc = null, Exception exception = null)
         {
-            log.Warn(this.GetLogObject(message, objectFunc, exception), exception);
+            StackTrace stackTrace = new StackTrace();
+
+            LogManager.GetLogger(stackTrace.GetFrame(1).GetMethod().DeclaringType).Warn(this.GetLogObject(message, objectFunc, exception), exception);
         }
 
         private object GetLogObject(string message, Func<object> objectFunc, Exception exception)

@@ -37,7 +37,7 @@ namespace Presentation.Api.Controllers
                     CustomerId = customerId
                 },
                 exception);
-                return StatusCode(500, exception);
+                return StatusCode(500, exception.Message);
             }
         }
 
@@ -46,7 +46,14 @@ namespace Presentation.Api.Controllers
         {
             try
             {
-                return this.Ok(await this.paymentService.GetPaymentById(id));
+                var result = await this.paymentService.GetPaymentById(id);
+
+                if(result == null)
+                {
+                    return this.NotFound();
+                }
+
+                return this.Ok(result);
             }
             catch (Exception exception)
             {
@@ -55,7 +62,7 @@ namespace Presentation.Api.Controllers
                     Id = id,
                 },
                 exception);
-                return StatusCode(500, exception);
+                return StatusCode(500, exception.Message);
             }
         }
 
@@ -74,7 +81,7 @@ namespace Presentation.Api.Controllers
                     PaymentRequest = paymentRequest,
                 },
                 exception);
-                return StatusCode(500, exception);
+                return StatusCode(500, exception.Message);
             }
         }
     }

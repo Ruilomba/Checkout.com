@@ -33,6 +33,12 @@
         public async Task<Payment> GetPaymentById(Guid id)
         {
             var result = await this.paymentRepository.GetById(id);
+
+            if(result == null)
+            {
+                return null;
+            }
+
             result.CardNumber.DecryptString(this.applicationSettings.Secret);
             return result;
         }
@@ -40,7 +46,7 @@
         public async Task<List<Payment>> SearchPayments(string cardNumber, string merchantId, string customerId)
         {
             var result = await this.paymentRepository.Search(cardNumber, merchantId, customerId);
-            result.ForEach(payment => payment.CardNumber.DecryptString(this.applicationSettings.Secret));
+            result?.ForEach(payment => payment.CardNumber.DecryptString(this.applicationSettings.Secret));
             return result;
         }
 

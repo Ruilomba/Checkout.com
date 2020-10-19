@@ -31,7 +31,7 @@ namespace Presentation.Api
             services.AddMvcCore().AddApiExplorer();
             services
                 .AddSingleton(applicationSettings)
-                .AddSingleton<Checkout.com.Common.Logging.ILog>(logger)
+                .AddSingleton(logger)
                 .SetupDependencies(applicationSettings)
                 .AddSwaggerGen(swagger =>
                 {
