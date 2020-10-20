@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Checkout.com.Common.Configuration;
+    using Checkout.com.Common.Encryption;
     using Checkout.com.Common.Utils;
     using Checkout.com.PaymentGateway.Business.Adapters;
     using Checkout.com.PaymentGateway.Business.Converters;
@@ -17,40 +18,45 @@
         private readonly IMerchantService merchantService;
         private readonly ApplicationSettings applicationSettings;
         private readonly IPaymentRepository paymentRepository;
+        private readonly IEncryptionService encryptionService;
 
         public PaymentService(
             IPaymentProcessor paymentProcessor, 
             IMerchantService merchantService,
             ApplicationSettings applicationSettings,
-            IPaymentRepository paymentRepository)
+            IPaymentRepository paymentRepository,
+            IEncryptionService encryptionService)
         {
             this.paymentProcessor = paymentProcessor;
             this.merchantService = merchantService;
             this.applicationSettings = applicationSettings;
             this.paymentRepository = paymentRepository;
+            this.encryptionService = encryptionService;
         }
 
         public async Task<Payment> GetPaymentById(Guid id)
         {
             var result = await this.paymentRepository.GetById(id);
 
-            if(result == null)
+            if (result == null)
             {
                 return null;
             }
 
-            result.CardNumber = result.CardNumber.DecryptString(this.applicationSettings.Secret);
+            this.DecryptCard(result);
             return result;
         }
+
 
         public async Task<List<Payment>> SearchPayments(string cardNumber, string merchantId, string customerId)
         {
             if(cardNumber != null)
             {
-                cardNumber = cardNumber.EncryptString(this.applicationSettings.Secret);
+                cardNumber = this.encryptionService.Encrypt(cardNumber,this.applicationSettings.Secret);
             }
+
             var result = await this.paymentRepository.Search(cardNumber, merchantId, customerId);
-            result?.ForEach(payment => payment.CardNumber = payment.CardNumber.DecryptString(this.applicationSettings.Secret));
+            result?.ForEach(payment => payment.CardNumber = this.encryptionService.Decrypt(payment.CardNumber, this.applicationSettings.Secret));
             return result;
         }
 
@@ -64,15 +70,20 @@
             var processmentResult =  await this.paymentProcessor.ProcessPayment(paymentRequest.ToAdapterDTO(commissionContractValue));
             var paymentSaveResult = await this.paymentRepository.SavePayment(paymentRequest.ToDTO(processmentResult.PaymentStatus));
 
-            paymentSaveResult.CardNumber = paymentSaveResult.CardNumber.DecryptString(applicationSettings.Secret);
+            paymentSaveResult.CardNumber = this.encryptionService.Decrypt(paymentSaveResult.CardNumber, applicationSettings.Secret);
             return paymentSaveResult;
 
         }
 
+        private void DecryptCard(Payment result)
+        {
+            result.CardNumber = this.encryptionService.Decrypt(result.CardNumber, this.applicationSettings.Secret);
+        }
+
         private void EncryptCard(Card card)
         {
-            card.CardNumber = card.CardNumber.EncryptString(applicationSettings.Secret);
-            card.CCV = card.CCV.EncryptString(applicationSettings.Secret);
+            card.CardNumber = this.encryptionService.Encrypt(card.CardNumber, applicationSettings.Secret);
+            card.CCV = this.encryptionService.Encrypt(card.CCV, applicationSettings.Secret);
         }
 
         private void ValidateRequest(PaymentRequest paymentRequest)

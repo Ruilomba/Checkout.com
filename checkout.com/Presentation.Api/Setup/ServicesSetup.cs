@@ -5,6 +5,8 @@
     using Checkout.com.AcquiringBank.Client;
     using Checkout.com.AcquiringBank.Client.Implementations;
     using Checkout.com.Common.Configuration;
+    using Checkout.com.Common.Encryption;
+    using Checkout.com.Common.Encryption.Implementations;
     using Checkout.com.Common.Mongo.Implementations;
     using Checkout.com.PaymentGateway.Business.Adapters;
     using Checkout.com.PaymentGateway.Business.Adapters.Implementations;
@@ -28,6 +30,7 @@
                     .AddTransient<AcquiringBank.IPaymentProcessor, AcquiringBank.Implementations.PaymentProcessor>()
                     .AddTransient<I3rdPartyBankAPI, _3rdPartyBankAPI>()
                     .AddTransient<IPaymentRepository, PaymentRepository>()
+                    .AddTransient<IEncryptionService, EncryptionService>()
                     .AddSingleton<IMongoDbConnection>(new MongoDbConnection(applicationSettings.ConnectionStrings["Payments"]));
         }
     }

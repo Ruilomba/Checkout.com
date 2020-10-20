@@ -7,17 +7,19 @@
     using Checkout.com.AcquiringBank.DTO.Card;
     using Checkout.com.AcquiringBank.DTO.Payments;
     using Checkout.com.Common.Configuration;
-    using Checkout.com.Common.Utils;
+    using Checkout.com.Common.Encryption;
 
     public class PaymentProcessor : IPaymentProcessor
     {
         private readonly ApplicationSettings applicationSettings;
         private readonly I3rdPartyBankAPI bankClient;
+        private readonly IEncryptionService encryptionService;
 
-        public PaymentProcessor(ApplicationSettings applicationSettings, I3rdPartyBankAPI bankClient)
+        public PaymentProcessor(ApplicationSettings applicationSettings, I3rdPartyBankAPI bankClient, IEncryptionService encryptionService)
         {
             this.applicationSettings = applicationSettings;
             this.bankClient = bankClient;
+            this.encryptionService = encryptionService;
         }
         public async Task<PaymentResponse> ProcessPayment(PaymentRequest paymentRequest)
         {
@@ -57,8 +59,8 @@
 
         private void DecryptCard(Card card)
         {
-            card.CardNumber = card.CardNumber.DecryptString(applicationSettings.Secret);
-            card.CCV = card.CCV.DecryptString(applicationSettings.Secret);
+            card.CardNumber = this.encryptionService.Decrypt(card.CardNumber, applicationSettings.Secret);
+            card.CCV = this.encryptionService.Decrypt(card.CCV, applicationSettings.Secret);
         }
 
         private void DecryptAndValidateCard(Card card)

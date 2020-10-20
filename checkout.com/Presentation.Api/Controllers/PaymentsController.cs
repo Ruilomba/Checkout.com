@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Checkout.com.Common.Logging;
-using Checkout.com.Common.Logging.Implementations;
 using Checkout.com.PaymentGateway.Business.Services;
 using Checkout.com.PaymentGateway.DTO.Payments;
 using Microsoft.AspNetCore.Mvc;
