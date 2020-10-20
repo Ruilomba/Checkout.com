@@ -8,7 +8,7 @@
 
     public abstract class Client
     {
-        private readonly HttpClient httpClient;
+        protected readonly HttpClient httpClient;
 
         public Client(string baseAddress)
         {

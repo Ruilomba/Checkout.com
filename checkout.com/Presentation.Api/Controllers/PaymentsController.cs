@@ -72,7 +72,7 @@ namespace Presentation.Api.Controllers
             try
             {
                 var result = await this.paymentService.ProcessPayment(paymentRequest);
-                return this.Created($"api/payments/{result.PaymentId}", result);
+                return this.Created($"api/payments/{result.Id}", result);
             }
             catch (Exception exception)
             {

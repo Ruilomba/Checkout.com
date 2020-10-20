@@ -54,7 +54,7 @@
             return result;
         }
 
-        public async Task<PaymentResponse> ProcessPayment(PaymentRequest paymentRequest)
+        public async Task<Payment> ProcessPayment(PaymentRequest paymentRequest)
         {
             this.ValidateRequest(paymentRequest);
             this.EncryptCard(paymentRequest.Merchant.Card);
@@ -64,11 +64,8 @@
             var processmentResult =  await this.paymentProcessor.ProcessPayment(paymentRequest.ToAdapterDTO(commissionContractValue));
             var paymentSaveResult = await this.paymentRepository.SavePayment(paymentRequest.ToDTO(processmentResult.PaymentStatus));
 
-            return new PaymentResponse
-            {
-                PaymentStatus = processmentResult.PaymentStatus,
-                PaymentId = paymentSaveResult.Id
-            };
+            paymentSaveResult.CardNumber = paymentSaveResult.CardNumber.DecryptString(applicationSettings.Secret);
+            return paymentSaveResult;
 
         }
 

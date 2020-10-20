@@ -7,7 +7,7 @@
 
     public interface IPaymentService
     {
-        Task<PaymentResponse> ProcessPayment(PaymentRequest paymentRequest);
+        Task<Payment> ProcessPayment(PaymentRequest paymentRequest);
 
         Task<Payment> GetPaymentById(Guid id);
 

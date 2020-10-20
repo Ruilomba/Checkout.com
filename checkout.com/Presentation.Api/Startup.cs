@@ -55,8 +55,6 @@ namespace Presentation.Api
                     swagger.SwaggerEndpoint("/swagger/v1/swagger.json", "Checkout.com Payments");
                 });
 
-            app.UseRouting();
-
             app
                .UseRouting()
                .UseEndpoints(endpoints => endpoints.MapControllers());

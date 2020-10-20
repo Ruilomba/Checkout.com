@@ -1,0 +1,47 @@
+﻿{
+  "Input": {
+    "merchant": {
+      "id": "1",
+      "currencyCode": "EUR",
+      "card": {
+        "expirationDate": {
+          "year": 2030,
+          "month": 1
+        },
+        "cardNumber": "123123",
+        "cardType": "MasterCard",
+        "ccv": "123"
+      }
+    },
+    "shopper": {
+      "user": {
+        "userName": "ruilomba",
+        "currencyCode": "EUR"
+      },
+      "card": {
+        "expirationDate": {
+          "year": 2030,
+          "month": 10
+        },
+        "cardNumber": "123",
+        "cardType": "MasterCard",
+        "ccv": "123"
+      }
+    },
+    "purchaseValue": {
+      "value": 2131231,
+      "currencyCode": "EUR"
+    }
+  },
+
+  "ExpectedOutput": {
+    "Payment": {
+      "CardNumber": "123",
+      "CustomerId": "ruilomba",
+      "MerchantId": "1",
+      "Value": 2131231,
+      "CurrencyCode": "EUR",
+      "Status": 0
+    }
+  }
+}

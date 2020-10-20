@@ -11,6 +11,6 @@
 
         Task<Payment> Get(Guid paymentId);
 
-        Task<PaymentResponse> Create(PaymentRequest paymentRequest);
+        Task<Payment> Create(PaymentRequest paymentRequest);
     }
 }

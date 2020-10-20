@@ -10,6 +10,7 @@ namespace Checkout.com.PaymentGateway.Business.DAL.Model
     public class Payment
     {
         [BsonId(IdGenerator = typeof(GuidGenerator))]
+        [BsonRepresentation(BsonType.String)]
         public Guid Id { get; set; }
 
         public string CardNumber { get; set; }
