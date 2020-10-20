@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Checkout.com.AcquiringBank.DTO.Payments;
+    using Checkout.com.PaymentGateway.DTO.Payments;
 
     public class PaymentGatewayClient : Client, IPaymentGatewayClient
     {

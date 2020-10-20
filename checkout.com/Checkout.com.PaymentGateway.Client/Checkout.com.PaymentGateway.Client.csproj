@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Checkout.com.AcquiringBank.DTO\Checkout.com.AcquiringBank.DTO.csproj" />
+    <ProjectReference Include="..\Checkout.com.PaymentGateway.DTO\Checkout.com.PaymentGateway.DTO.csproj" />
   </ItemGroup>
 
 </Project>
