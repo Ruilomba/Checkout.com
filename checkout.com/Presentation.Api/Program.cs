@@ -21,6 +21,17 @@ namespace Presentation.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    var env = hostingContext.HostingEnvironment;
+                    var environmentName = Environment.GetEnvironmentVariable("ENV") ?? env.EnvironmentName;
+
+                    config
+                        .SetBasePath(env.ContentRootPath)
+                        .AddJsonFile("appsettings.json", false, true)
+                        .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+                        .AddEnvironmentVariables()
+                        .AddCommandLine(args);
                 });
     }
 }

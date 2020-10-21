@@ -28,7 +28,10 @@ namespace Presentation.Api
             ApplicationSettings applicationSettings = this.configuration.GetSection("ApplicationSettings").Get<ApplicationSettings>();
             Checkout.com.Common.Logging.ILog logger = this.SetupLogging();
 
-            services.AddMvcCore().AddApiExplorer();
+            services
+                .AddMvcCore()
+                .AddApiExplorer();
+
             services
                 .AddSingleton(applicationSettings)
                 .AddSingleton(logger)

@@ -21,7 +21,7 @@ namespace Checkout.com.IntegrationTests
         private const string cardNumber = "1234";
         private const string cardNumberEncrypted = "H+TW00KCel3dWHyqA+mlAg==";
         private readonly Fixture Fixture = new Fixture();
-        private const string connectionString = "mongodb+srv://checkout_payment_gateway:checkoutUser@cluster0.bwyrg.mongodb.net/payment_gateway?retryWrites=true&w=majority";
+        private const string connectionString = "mongodb+srv://checkout_payment_gateway:checkoutUser@cluster0.bwyrg.mongodb.net/payment_gateway_tests?retryWrites=true&w=majority";
 
         public IntegrationTests()
         {
