@@ -1,9 +1,10 @@
 ﻿namespace Checkout.com.PaymentGateway.Tests.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoFixture;
-    using Checkout.com.AcquiringBank.Business.Services;
     using Checkout.com.Common.Configuration;
     using Checkout.com.Common.Encryption;
     using Checkout.com.PaymentGateway.Business.DAL.Repositories;
@@ -60,7 +61,7 @@
             DTO.Payments.Payment payment = this.fixture.Create<DTO.Payments.Payment>();
             var decryptedCard = this.fixture.Create<string>();
             ArrangeGetById(id, payment);
-            ArrangeEncryption(payment, decryptedCard);
+            ArrangeDecryption(payment, decryptedCard);
 
             var result = await this.paymentService.GetPaymentById(id);
 
@@ -73,7 +74,69 @@
             result.Value.Should().Be(payment.Value);
         }
 
-        private void ArrangeEncryption(DTO.Payments.Payment payment, string decryptedCard)
+        [Fact]
+        public async Task SearchPayment_NoResults_ShouldReturnEmpty()
+        {
+            var cardNumber = this.fixture.Create<string>();
+            var customerId = this.fixture.Create<string>();
+            var merchantId = this.fixture.Create<string>();
+            List<DTO.Payments.Payment> payments = Enumerable.Empty<DTO.Payments.Payment>().ToList();
+            var encryptedCard = this.fixture.Create<string>();
+            ArrangeEncryption(cardNumber, encryptedCard);
+            ArrangeSearchQuery(encryptedCard, customerId, merchantId, payments);
+
+            var result = await this.paymentService.SearchPayments(cardNumber, merchantId, customerId);
+
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task SearchPayment_WithResults_ShouldReturnResultWithDecryptedCard()
+        {
+            var cardNumber = this.fixture.Create<string>();
+            var customerId = this.fixture.Create<string>();
+            var merchantId = this.fixture.Create<string>();
+            var encryptedCard = this.fixture.Create<string>();
+            List<DTO.Payments.Payment> payments = this.fixture.Build<DTO.Payments.Payment>()
+                .With(x => x.CardNumber, encryptedCard)
+                .CreateMany(1)
+                .ToList();
+
+            ArrangeEncryption(cardNumber, encryptedCard);
+            ArrangeSearchQuery(encryptedCard, customerId, merchantId, payments);
+            payments.ForEach(x => ArrangeDecryption(x, cardNumber));
+
+            var result = await this.paymentService.SearchPayments(cardNumber, merchantId, customerId);
+
+            result.Should().NotBeEmpty()
+                .And
+                .HaveCount(1)
+                .And
+                .SatisfyRespectively(
+                first =>
+                {
+                    first.Id.Should().Be(payments[0].Id);
+                    first.CardNumber.Should().Be(cardNumber);
+                    first.CustomerId.Should().Be(payments[0].CustomerId);
+                    first.MerchantId.Should().Be(payments[0].MerchantId);
+                    first.PaymentDate.Should().Be(payments[0].PaymentDate);
+                    first.Status.Should().Be(payments[0].Status);
+                    first.Value.Should().Be(payments[0].Value);
+                    first.CurrencyCode.Should().Be(payments[0].CurrencyCode);
+                });
+        }
+
+        private void ArrangeEncryption(string cardNumber, string encryptedCard)
+        {
+            this.encryptionServiceMock.Setup(x => x.Encrypt(cardNumber, this.applicationSettings.Secret)).Returns(encryptedCard);
+        }
+
+        private void ArrangeSearchQuery(string cardNumber, string customerId, string merchantId, List<DTO.Payments.Payment> payments)
+        {
+            this.paymentRepositoryMock.Setup(x => x.Search(cardNumber, merchantId, customerId)).ReturnsAsync(payments);
+        }
+
+        private void ArrangeDecryption(DTO.Payments.Payment payment, string decryptedCard)
         {
             this.encryptionServiceMock.Setup(x => x.Decrypt(payment.CardNumber, this.applicationSettings.Secret)).Returns(decryptedCard);
         }
