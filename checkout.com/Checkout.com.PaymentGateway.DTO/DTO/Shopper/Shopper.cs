@@ -1,7 +1,7 @@
-﻿using Checkout.com.PaymentGateway.DTO.Card;
-
-namespace Checkout.com.PaymentGateway
+﻿namespace Checkout.com.PaymentGateway
 {
+    using Checkout.com.PaymentGateway.DTO.Card;
+
     public class Shopper
     {
         public User User { get; set; }

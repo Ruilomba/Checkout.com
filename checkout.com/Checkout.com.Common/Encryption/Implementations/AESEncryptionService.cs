@@ -1,11 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-
-namespace Checkout.com.Common.Encryption.Implementations
+﻿namespace Checkout.com.Common.Encryption.Implementations
 {
-    public class EncryptionService : IEncryptionService
+    using System;
+    using System.IO;
+    using System.Security.Cryptography;
+    using System.Text;
+
+    public class AESEncryptionService : IEncryptionService
     {
         public string Decrypt(string cipherText, string key)
         {

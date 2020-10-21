@@ -4,7 +4,7 @@
     using Checkout.com.Common.Configuration.Entities;
     using Checkout.com.PaymentGateway.Business.Adapters.DTO;
 
-    public static class AcquiringBankInternalExternalAdapters
+    public static class AcquiringBankInternalExternalConverters
     {
         public static AcquiringBank.DTO.Payments.PaymentRequest ToExternalRequest(
             this PaymentProcessorPaymentRequest paymentRequest,

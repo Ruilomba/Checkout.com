@@ -30,7 +30,7 @@
                     .AddTransient<AcquiringBank.IPaymentProcessor, AcquiringBank.Implementations.PaymentProcessor>()
                     .AddTransient<I3rdPartyBankAPI, _3rdPartyBankAPI>()
                     .AddTransient<IPaymentRepository, PaymentRepository>()
-                    .AddTransient<IEncryptionService, EncryptionService>()
+                    .AddTransient<IEncryptionService, AESEncryptionService>()
                     .AddSingleton<IMongoDbConnection>(new MongoDbConnection(applicationSettings.ConnectionStrings["Payments"]));
         }
     }

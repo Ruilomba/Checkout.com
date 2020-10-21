@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
     using Checkout.com.Common.Configuration;
     using Checkout.com.Common.Encryption;
-    using Checkout.com.Common.Utils;
     using Checkout.com.PaymentGateway.Business.Adapters;
     using Checkout.com.PaymentGateway.Business.Converters;
     using Checkout.com.PaymentGateway.Business.DAL.Repositories;

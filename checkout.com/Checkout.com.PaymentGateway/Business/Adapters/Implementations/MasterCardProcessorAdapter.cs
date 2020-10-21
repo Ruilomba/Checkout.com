@@ -22,7 +22,7 @@
 
         public async Task<PaymentResponse> ProcessPayment(PaymentProcessorPaymentRequest paymentRequest)
         {
-            var commissionPaymentValue = paymentRequest.PurchaseValue.WithoutPercentage(paymentRequest.GatewayCommission);
+            var commissionPaymentValue = paymentRequest.PurchaseValue.GetPercentageValue(paymentRequest.GatewayCommission);
             var merchantPaymentValue = paymentRequest.PurchaseValue - commissionPaymentValue;
             var result = await this.paymentProcessor.ProcessPayment(
                 paymentRequest.ToExternalRequest(
