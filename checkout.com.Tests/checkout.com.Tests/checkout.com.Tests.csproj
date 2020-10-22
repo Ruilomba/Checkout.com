@@ -20,9 +20,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Input\Files\process_payment.json">
+    <None Update="End2EndTests\Data\process_payment.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="IntegrationTests\Data\" />
   </ItemGroup>
 
 </Project>

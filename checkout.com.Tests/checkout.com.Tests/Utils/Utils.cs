@@ -1,4 +1,4 @@
-﻿namespace checkout.com.IntegrationTests.Utils
+﻿namespace checkout.com.Tests.Utils
 {
     using Newtonsoft.Json;
 

@@ -1,36 +1,28 @@
-namespace Checkout.com.IntegrationTests
+namespace Checkout.com.Tests.End2EndTests
 {
-    using System;
     using System.Threading.Tasks;
     using AutoFixture;
-    using checkout.com.IntegrationTests.Utils;
-    using Checkout.com.Common.Mongo;
-    using Checkout.com.Common.Mongo.Implementations;
-    using Checkout.com.IntegrationTests.Input;
+    using checkout.com.Tests.Utils;
+    using Checkout.com.Tests.Input;
     using Checkout.com.PaymentGateway.Client;
     using Checkout.com.PaymentGateway.Client.Implementation;
     using Checkout.com.PaymentGateway.DTO.Payments;
-    using MongoDB.Driver;
     using Xunit;
+    using checkout.com.Tests;
 
-    public class IntegrationTests
+    public class End2EndTests : BaseTests
     {
         private readonly IPaymentGatewayClient paymentGatewayClient;
-        private readonly IMongoDbConnection mongoConnection;
         private const string cardNumber = "1234";
         private const string cardNumberEncrypted = "H+TW00KCel3dWHyqA+mlAg==";
-        private readonly Fixture Fixture = new Fixture();
-        private const string connectionString = "mongodb+srv://checkout_payment_gateway:checkoutUser@cluster0.bwyrg.mongodb.net/payment_gateway_tests?retryWrites=true&w=majority";
 
-        public IntegrationTests()
+        public End2EndTests() : base()
         {
-            this.mongoConnection = new MongoDbConnection(connectionString);
-            this.mongoConnection.Connect();
             this.paymentGatewayClient = new PaymentGatewayClient("https://localhost:44329");
         }
 
         [Theory]
-        [JsonFileData("Input/Files/process_payment.json")]
+        [JsonFileData("End2EndTests/Data/process_payment.json")]
         public async Task ProcessPayment_ShouldProcess(dynamic input, dynamic expectedResponse)
         {
             PaymentRequest request = Utils.GetData<PaymentRequest>(input);
@@ -42,7 +34,7 @@ namespace Checkout.com.IntegrationTests
             Assert.Equal(expectedPayment.CardNumber, result.CardNumber);
             Assert.Equal(expectedPayment.CurrencyCode, result.CurrencyCode);
             Assert.Equal(expectedPayment.CustomerId, result.CustomerId);
-            await ClearPayment(result.Id);
+            await DeleteAll();
         }
 
         [Fact]
@@ -65,7 +57,7 @@ namespace Checkout.com.IntegrationTests
                            && payment.CardNumber == cardNumber
                            && payment.MerchantId == paymentToAdd.MerchantId);
 
-            await ClearPayment(paymentToAdd.Id);
+            await DeleteAll();
         }
 
         [Fact]
@@ -80,20 +72,7 @@ namespace Checkout.com.IntegrationTests
             var result = await this.paymentGatewayClient.Get(paymentToAdd.Id);
 
             Assert.NotNull(result);
-            await ClearPayment(paymentToAdd.Id);
-        }
-
-        private async Task ClearPayment(Guid id)
-        {
-            var filter = Builders<PaymentGateway.Business.DAL.Model.Payment>.Filter.Eq(payment => payment.Id, id);
-            await this.mongoConnection.GetCollection<PaymentGateway.Business.DAL.Model.Payment>(CollectionNames.Payments)
-                .FindOneAndDeleteAsync(filter);
-        }
-
-        private async Task InsertPayment(PaymentGateway.Business.DAL.Model.Payment paymentToAdd)
-        {
-            await this.mongoConnection.GetCollection<PaymentGateway.Business.DAL.Model.Payment>(CollectionNames.Payments)
-                .InsertOneAsync(paymentToAdd);
+            await DeleteAll();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Checkout.com.IntegrationTests.Input
+﻿namespace Checkout.com.Tests.Input
 {
     using System;
     using System.Collections.Generic;
