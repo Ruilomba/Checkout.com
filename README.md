@@ -64,9 +64,7 @@ For that I only tested a small portion of the application.
 * end2end Tests -> Added one end2endTest for each endpoint
 * Integration Tests -> ShouldSaveAndFetchPaymentById and ShouldSaveAndFetchPaymentUsingSearch where I test all methods of the payment repository
 
-Business assumptions and solutions
-
-#### Business assumption
+#### Business Assumptions and Solutions
 
 * Assumption -> Payment gateway has different contracts for each merchant
 * Solution -> payment gateway service will fetch data on merchant service regarding the commission that this merchant has to pay.
