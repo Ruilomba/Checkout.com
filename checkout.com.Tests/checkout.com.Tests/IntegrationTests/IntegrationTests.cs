@@ -30,16 +30,10 @@
             var result = await this.paymentRepository.GetById(savedPayment.Id);
 
             Assert.NotNull(result);
-            Assert.Equal(savedPayment.CardNumber, result.CardNumber);
-            Assert.Equal(savedPayment.CustomerId, result.CustomerId);
-            Assert.Equal(savedPayment.CurrencyCode, result.CurrencyCode);
-            Assert.Equal(savedPayment.Id, result.Id);
-            Assert.Equal(savedPayment.MerchantId, result.MerchantId);
-            Assert.Equal(savedPayment.PaymentDate, result.PaymentDate, System.TimeSpan.FromMinutes(2));
-            Assert.Equal(savedPayment.Status, result.Status);
-            Assert.Equal(savedPayment.Value, result.Value);
+            this.AssertEqual(savedPayment, result);
             await this.DeleteAll();
         }
+
 
         [Fact]
         public async Task ShouldSaveAndFetchPaymentUsingSearch()
@@ -56,15 +50,20 @@
             Assert.NotNull(result);
             Assert.NotEmpty(result);
             var firstEntry = result[0];
-            Assert.Equal(savedPayment.CardNumber, firstEntry.CardNumber);
-            Assert.Equal(savedPayment.CustomerId, firstEntry.CustomerId);
-            Assert.Equal(savedPayment.CurrencyCode, firstEntry.CurrencyCode);
-            Assert.Equal(savedPayment.Id, firstEntry.Id);
-            Assert.Equal(savedPayment.MerchantId, firstEntry.MerchantId);
-            Assert.Equal(savedPayment.PaymentDate, firstEntry.PaymentDate, System.TimeSpan.FromMinutes(2));
-            Assert.Equal(savedPayment.Status, firstEntry.Status);
-            Assert.Equal(savedPayment.Value, firstEntry.Value);
+            this.AssertEqual(savedPayment, firstEntry);
             await this.DeleteAll();
+        }
+
+        private void AssertEqual(Payment savedPayment, Payment result)
+        {
+            Assert.Equal(savedPayment.CardNumber, result.CardNumber);
+            Assert.Equal(savedPayment.CustomerId, result.CustomerId);
+            Assert.Equal(savedPayment.CurrencyCode, result.CurrencyCode);
+            Assert.Equal(savedPayment.Id, result.Id);
+            Assert.Equal(savedPayment.MerchantId, result.MerchantId);
+            Assert.Equal(savedPayment.PaymentDate, result.PaymentDate, TimeSpan.FromMinutes(2));
+            Assert.Equal(savedPayment.Status, result.Status);
+            Assert.Equal(savedPayment.Value, result.Value);
         }
     }
 }

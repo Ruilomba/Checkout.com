@@ -25,6 +25,7 @@ namespace Checkout.com.Tests.End2EndTests
         [JsonFileData("End2EndTests/Data/process_payment.json")]
         public async Task ProcessPayment_ShouldProcess(dynamic input, dynamic expectedResponse)
         {
+            await this.DeleteAll();
             PaymentRequest request = Utils.GetData<PaymentRequest>(input);
             var result = await this.paymentGatewayClient.Create(request);
             var expectedPayment = Utils.GetData<Payment>(expectedResponse.Payment);
@@ -40,6 +41,7 @@ namespace Checkout.com.Tests.End2EndTests
         [Fact]
         public async Task SearchPayments_ShouldRetriveData()
         {
+            await this.DeleteAll();
             var paymentToAdd = this.Fixture.Build<PaymentGateway.Business.DAL.Model.Payment>()
                 .With(x => x.CardNumber, "H+TW00KCel3dWHyqA+mlAg==")
                 .Create();
@@ -63,6 +65,7 @@ namespace Checkout.com.Tests.End2EndTests
         [Fact]
         public async Task GetPaymentById_ShouldRetriveData()
         {
+            await this.DeleteAll();
             var paymentToAdd = this.Fixture.Build<PaymentGateway.Business.DAL.Model.Payment>()
                 .With(x => x.CardNumber, cardNumberEncrypted)
                 .Create();
