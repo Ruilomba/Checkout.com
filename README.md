@@ -37,4 +37,8 @@ This will run both integration and end2endTests
 
 ### Use cases
 
-![Process Payment](Documentation/UseCases/ProcessPayment.png)
+![Process Payment](Documentation/Use%20Cases/ProcessPayment.png)
+
+![Search Payment](Documentation/Use%20Cases/SearchPayments.png)
+
+![Search Payment](Documentation/Use%20Cases/GetPaymentById.png)

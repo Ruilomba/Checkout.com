@@ -66,13 +66,9 @@
             var result = await this.paymentService.GetPaymentById(id);
 
             result.Should().NotBeNull();
-            result.CardNumber.Should().Be(decryptedCard);
-            result.CurrencyCode.Should().Be(payment.CurrencyCode);
-            result.CustomerId.Should().Be(payment.CustomerId);
-            result.PaymentDate.Should().Be(payment.PaymentDate);
-            result.Status.Should().Be(payment.Status);
-            result.Value.Should().Be(payment.Value);
+            this.AssertEqualPayment(payment, decryptedCard, result);
         }
+
 
         [Fact]
         public async Task SearchPayment_NoResults_ShouldReturnEmpty()
@@ -116,14 +112,19 @@
                 first =>
                 {
                     first.Id.Should().Be(payments[0].Id);
-                    first.CardNumber.Should().Be(cardNumber);
-                    first.CustomerId.Should().Be(payments[0].CustomerId);
-                    first.MerchantId.Should().Be(payments[0].MerchantId);
-                    first.PaymentDate.Should().Be(payments[0].PaymentDate);
-                    first.Status.Should().Be(payments[0].Status);
-                    first.Value.Should().Be(payments[0].Value);
-                    first.CurrencyCode.Should().Be(payments[0].CurrencyCode);
+                    this.AssertEqualPayment(first, cardNumber, payments[0]);
                 });
+        }
+
+        private void AssertEqualPayment(DTO.Payments.Payment payment, string expectedCardNumber, DTO.Payments.Payment result)
+        {
+            result.CardNumber.Should().Be(expectedCardNumber);
+            result.CurrencyCode.Should().Be(payment.CurrencyCode);
+            result.CustomerId.Should().Be(payment.CustomerId);
+            result.PaymentDate.Should().Be(payment.PaymentDate);
+            result.Status.Should().Be(payment.Status);
+            result.Value.Should().Be(payment.Value);
+            result.MerchantId.Should().Be(payment.MerchantId);
         }
 
         private void ArrangeEncryption(string cardNumber, string encryptedCard)
