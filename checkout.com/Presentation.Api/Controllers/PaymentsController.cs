@@ -49,7 +49,7 @@ namespace Presentation.Api.Controllers
 
                 if(result == null)
                 {
-                    return this.NotFound();
+                    return this.NotFound(null);
                 }
 
                 return this.Ok(result);

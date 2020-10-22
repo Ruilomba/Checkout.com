@@ -24,12 +24,12 @@ RUN dotnet build "Presentation.Api.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "Presentation.Api.csproj" -c Release -o /app/publish
 
-FROM build AS testrunner
+FROM build AS tests
 WORKDIR "/src/Checkout.com.PaymentGateway.Tests"
 CMD ["dotnet", "test", "--logger:trx"]
 
 # run the unit tests
-FROM build AS testRunnerSpecial
+FROM build AS testRunner
 WORKDIR "/src/Checkout.com.PaymentGateway.Tests"
 RUN dotnet test --logger:trx
 

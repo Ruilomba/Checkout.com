@@ -18,7 +18,7 @@ namespace Checkout.com.Tests.End2EndTests
 
         public End2EndTests() : base()
         {
-            this.paymentGatewayClient = new PaymentGatewayClient("https://localhost:44329");
+            this.paymentGatewayClient = new PaymentGatewayClient("http://localhost:5000");
         }
 
         [Theory]
