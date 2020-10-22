@@ -1,7 +1,6 @@
 namespace Checkout.com.IntegrationTests
 {
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
     using AutoFixture;
     using checkout.com.IntegrationTests.Utils;
