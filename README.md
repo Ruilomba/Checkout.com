@@ -14,7 +14,11 @@ Access api http://localhost:5000/swagger
 ##### End2EndTests
 Start Presentation.Api.csproj using ASPNETCORE_ENVIRONMENT as Tests
 
-Navigate to Tests folder and use dotnet test on checkout.com.Tests.csproj
+Navigate to Tests folder and use 
+```powershell
+dotnet test
+```  
+on checkout.com.Tests.csproj
 This will run both integration and end2endTests
 
 ### Run application using docker
@@ -35,7 +39,11 @@ Access application on http://localhost:5000/swagger
 ```powershell
 docker run --rm -it -p 5000:80 -e "ASPNETCORE_ENVIRONMENT=Tests" checkout.com-api
 ```
-Navigate to Tests folder and use dotnet test on checkout.com.Tests.csproj
+Navigate to Tests folder and use 
+```powershell
+dotnet test
+``` 
+on checkout.com.Tests.csproj
 This will run both integration and end2endTests
 
 ## Documentation
@@ -71,10 +79,10 @@ For that I only tested a small portion of the application.
 
 
 
-* Assumption -> Payment gateway will redirect ayments made with different cards to the appropriate acquiring bank capable of handling such request.
+* Assumption -> Payment gateway will redirect payments made with different cards to the appropriate acquiring bank capable of handling such request.
 Those acquiring bank api's have different API's
 
-* Solution -> Payment gateway will connect to an adapter, which is responsible detecting what type of transaction needs to be done,
+* Solution -> Payment gateway will connect to an adapter, which is responsible for detecting what type of transaction needs to be done,
  transforming data accordingly and send the request to the appropriate acquiring bank.
 If the card is Master Card the request will be redirected to the currently unique implementation 
 that I have which is the Acquiring Bank. This acquiring bank receives two payments as input so I create a payment from shopper to
@@ -95,12 +103,12 @@ It also exists an implementation for adapting a request if the card is VISA, how
 
 * Assumption -> We cannot send CCV and Card number to Acquiring bank without encryption
 * Solution -> There is a shared key between payment gateway and acquiring bank so the data will be encrypted before sending and decrypted 
-* for reading the values.
+for reading the values.
 
 
 #### Technical solution
-I tried to decouple logic and dependencies as much as I could having created a client for calling our API but referencing only the
-DTO project on the API in order not to give not needed ambiguity to our clients
+I tried to decouple logic and dependencies as much as I could. For example created a client for calling our API but refering only the
+DTO project on the API in order not to give extra ambiguity to our clients
 
 
 
