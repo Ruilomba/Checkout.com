@@ -116,6 +116,127 @@
                 });
         }
 
+        [Fact]
+        public async Task ProcessPayment_ValidData_ShouldStoreInDatabaseAndReturn()
+        {
+            var merchantCardNumber = this.fixture.Create<int>().ToString();
+            var merchantCardCCV = this.fixture.Create<int>().ToString();
+            var shopperCardNumber = this.fixture.Create<int>().ToString();
+            var shopperCardCCV = this.fixture.Create<int>().ToString();
+            var nextYear = DateTime.Now.AddYears(1).Year;
+            DTO.Payments.PaymentRequest paymentRequest = InitializePaymentRequest(
+                merchantCardNumber,
+                merchantCardCCV,
+                shopperCardNumber,
+                shopperCardCCV, 
+                nextYear);
+            var encryptedShopperCardNumber = this.fixture.Create<string>();
+            var encryptedShopperCardCCV = this.fixture.Create<string>();
+            var encryptedMerchantCardNumber = this.fixture.Create<string>();
+            var encryptedMerchantCardCCV = this.fixture.Create<string>();
+            var merchantCommission = this.fixture.Create<decimal>();
+            var processmentResult = this.fixture.Create<DTO.Payments.PaymentResponse>();
+            var paymentSaveResult = this.fixture.Create<DTO.Payments.Payment>();
+            var paymentSaveResultDecryptedCard = this.fixture.Create<string>();
+
+            this.Arrange(
+                paymentRequest,
+                encryptedShopperCardNumber,
+                encryptedShopperCardCCV,
+                encryptedMerchantCardNumber,
+                encryptedMerchantCardCCV,
+                merchantCommission,
+                processmentResult,
+                paymentSaveResult,
+                paymentSaveResultDecryptedCard);
+
+            var result = await this.paymentService.ProcessPayment(paymentRequest);
+
+            AssertEqualPayment(paymentSaveResult, paymentSaveResultDecryptedCard, result);
+        }
+
+        [Fact]
+        public async Task ProcessPayment_InvalidDataCardExpired_ShouldThrow()
+        {
+            var merchantCardNumber = this.fixture.Create<int>().ToString();
+            var merchantCardCCV = this.fixture.Create<int>().ToString();
+            var shopperCardNumber = this.fixture.Create<int>().ToString();
+            var shopperCardCCV = this.fixture.Create<int>().ToString();
+            var prevYear = DateTime.Now.AddYears(-1).Year;
+            DTO.Payments.PaymentRequest paymentRequest = InitializePaymentRequest(
+                merchantCardNumber,
+                merchantCardCCV,
+                shopperCardNumber,
+                shopperCardCCV,
+                prevYear);
+
+            var ex = await Assert.ThrowsAsync<ArgumentException>(async () => await this.paymentService.ProcessPayment(paymentRequest));
+            Assert.Equal("Merchant Card is expired", ex.Message);
+        }
+
+        [Fact]
+        public async Task ProcessPayment_InvalidDataCardNotValid_ShouldThrow()
+        {
+            var merchantCardNumber = this.fixture.Create<string>();
+            var merchantCardCCV = this.fixture.Create<int>().ToString();
+            var shopperCardNumber = this.fixture.Create<int>().ToString();
+            var shopperCardCCV = this.fixture.Create<int>().ToString();
+            var prevYear = DateTime.Now.AddYears(-1).Year;
+            DTO.Payments.PaymentRequest paymentRequest = InitializePaymentRequest(
+                merchantCardNumber,
+                merchantCardCCV,
+                shopperCardNumber,
+                shopperCardCCV,
+                prevYear);
+
+            var ex = await Assert.ThrowsAsync<ArgumentException>(async () => await this.paymentService.ProcessPayment(paymentRequest));
+            Assert.Equal("Merchant Card number is not valid", ex.Message);
+        }
+
+        private DTO.Payments.PaymentRequest InitializePaymentRequest(string merchantCardNumber, string merchantCardCCV, string shopperCardNumber, string shopperCardCCV, int nextYear)
+        {
+            var paymentRequest = this.fixture.Build<DTO.Payments.PaymentRequest>()
+                            .Create();
+            paymentRequest.Merchant.Card.CardNumber = merchantCardNumber;
+            paymentRequest.Merchant.Card.CCV = merchantCardCCV;
+            paymentRequest.Shopper.Card.CCV = shopperCardCCV;
+            paymentRequest.Shopper.Card.CardNumber = shopperCardNumber;
+            paymentRequest.Merchant.Card.ExpirationDate.Year = nextYear;
+            paymentRequest.Shopper.Card.ExpirationDate.Year = nextYear;
+            return paymentRequest;
+        }
+
+        private void Arrange(DTO.Payments.PaymentRequest paymentRequest, string encryptedShopperCardNumber, string encryptedShopperCardCCV, string encryptedMerchantCardNumber, string encryptedMerchantCardCCV, decimal merchantCommission, DTO.Payments.PaymentResponse processmentResult, DTO.Payments.Payment paymentSaveResult, string paymentSaveResultDecryptedCard)
+        {
+            ArrangeEncryption(paymentRequest.Shopper.Card.CardNumber, encryptedShopperCardNumber);
+            ArrangeEncryption(paymentRequest.Shopper.Card.CCV, encryptedShopperCardCCV);
+            ArrangeEncryption(paymentRequest.Shopper.Card.CardNumber, encryptedMerchantCardNumber);
+            ArrangeEncryption(paymentRequest.Merchant.Card.CCV, encryptedMerchantCardCCV);
+
+            this.merchantServiceMock.Setup(x => x.GetCommisionFromMerchant(paymentRequest.Merchant.Id)).Returns(merchantCommission);
+
+            this.paymentProcessorMock.Setup(x => x.ProcessPayment(
+                It.Is<Business.Adapters.DTO.PaymentProcessorPaymentRequest>(x =>
+                        x.GatewayCommission == merchantCommission
+                        && x.Merchant.Equals(paymentRequest.Merchant)
+                        && x.Shopper.Equals(paymentRequest.Shopper)
+                        && x.PurchaseValue.Currency == paymentRequest.PurchaseValue.CurrencyCode
+                        && x.PurchaseValue.Value == paymentRequest.PurchaseValue.Value
+                    ))).ReturnsAsync(processmentResult);
+
+            this.paymentRepositoryMock.Setup(x => x.SavePayment(It.Is<DTO.Payments.Payment>(x =>
+                    x.CardNumber == paymentRequest.Shopper.Card.CardNumber
+                    && x.CurrencyCode == paymentRequest.Shopper.User.CurrencyCode
+                    && x.CustomerId == paymentRequest.Shopper.User.UserName
+                    && x.MerchantId == paymentRequest.Merchant.Id
+                    && x.Status == processmentResult.PaymentStatus
+                    && x.Value == paymentRequest.PurchaseValue.Value
+                    && x.PaymentDate != null
+                ))).ReturnsAsync(paymentSaveResult);
+
+            ArrangeDecryption(paymentSaveResult, paymentSaveResultDecryptedCard);
+        }
+
         private void AssertEqualPayment(DTO.Payments.Payment payment, string expectedCardNumber, DTO.Payments.Payment result)
         {
             result.CardNumber.Should().Be(expectedCardNumber);
